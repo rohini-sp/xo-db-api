@@ -227,8 +227,13 @@ async def delete_all(channel: str = Query(...), peer: str = Query(...)):
         )
         if not user_row:
             return {"ok": True, "deleted_count": 0}
-        
+
         result = await conn.execute(
             "DELETE FROM user_memories WHERE user_id = $1", user_row["id"]
         )
         return {"ok": True, "deleted_count": int(result.split()[-1])}
+
+
+# Vercel serverless handler
+from mangum import Mangum
+handler = Mangum(app)
